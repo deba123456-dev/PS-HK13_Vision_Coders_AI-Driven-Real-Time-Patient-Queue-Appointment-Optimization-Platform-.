@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>MediFlow AI — Apply for Hospital Bed</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --bg-base: #060D1A;
+            --bg-card: #0F1E35;
+            --bg-surface: #0B1628;
+            --border: rgba(16, 185, 129, 0.15);
+            --border-hover: rgba(16, 185, 129, 0.35);
+            --text-primary: #E2F0FF;
+            --text-secondary: #7BA3C8;
+            --text-muted: #4A6080;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-base);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Topbar ── */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 28px;
+            height: 66px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(12px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .brand-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #34D399, #60A5FA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .topbar-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .topbar-links a {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 7px 14px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            transition: all .2s;
+        }
+
+        .topbar-links a:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+        }
+
+        .topbar-links a.active {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--border-hover);
+            color: #34D399;
+        }
+
+        /* ── Page layout ── */
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 36px 20px 60px;
+        }
+
+        /* ── Section title ── */
+        .section-head {
+            margin-bottom: 28px;
+        }
+
+        .section-head h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #34D399, #60A5FA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-head p {
+            margin-top: 6px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* ── Card ── */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title span {
+            font-size: 20px;
+        }
+
+        /* ── Form ── */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-grid .full {
+            grid-column: 1 / -1;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 11px 14px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color .2s;
+            width: 100%;
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .field select option {
+            background: #0F1E35;
+        }
+
+        .field textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Bed type cards */
+        .bed-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .bed-opt {
+            position: relative;
+        }
+
+        .bed-opt input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+        }
+
+        .bed-opt label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 14px 10px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(255, 255, 255, 0.07);
+            background: rgba(255, 255, 255, 0.03);
+            cursor: pointer;
+            transition: all .2s;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            text-transform: none;
+        }
+
+        .bed-opt label .ico {
+            font-size: 22px;
+        }
+
+        .bed-opt label .price {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .bed-opt input:checked+label {
+            border-color: var(--primary);
+            background: rgba(16, 185, 129, 0.1);
+            color: #34D399;
+        }
+
+        .bed-opt label:hover {
+            border-color: var(--border-hover);
+        }
+
+        /* Priority pills */
+        .priority-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .prio-opt {
+            position: relative;
+        }
+
+        .prio-opt input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+        }
+
+        .prio-opt label {
+            padding: 7px 18px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 700;
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            transition: all .2s;
+        }
+
+        .prio-opt.low label {
+            color: #34D399;
+        }
+
+        .prio-opt.medium label {
+            color: #38BDF8;
+        }
+
+        .prio-opt.high label {
+            color: #FBB23C;
+        }
+
+        .prio-opt.critical label {
+            color: #F87171;
+        }
+
+        .prio-opt input:checked+label {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: currentColor;
+        }
+
+        /* Submit btn */
+        .btn-submit {
+            margin-top: 8px;
+            width: 100%;
+            background: linear-gradient(135deg, #10B981, #059669);
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity .2s, transform .1s;
+        }
+
+        .btn-submit:hover {
+            opacity: .9;
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* ── Error alert ── */
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #F87171;
+            border-radius: 12px;
+            padding: 14px 18px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* ── Success card ── */
+        .success-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(14, 165, 233, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            padding: 36px;
+            box-shadow: 0 8px 40px rgba(16, 185, 129, 0.12);
+            animation: fadeIn .5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34D399;
+            border-radius: 99px;
+            padding: 6px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .success-card h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .success-card>p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+        }
+
+        .cred-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .cred-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .cred-box .cred-lbl {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 8px;
+        }
+
+        .cred-box .cred-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: .04em;
+        }
+
+        .cred-box.app-id .cred-val {
+            color: #60A5FA;
+        }
+
+        .cred-box.user-id .cred-val {
+            color: #34D399;
+        }
+
+        .cred-box.pwd .cred-val {
+            color: #FBB23C;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+        }
+
+        .cred-box.amt .cred-val {
+            color: #A78BFA;
+        }
+
+        .warn-note {
+            background: rgba(251, 178, 60, 0.08);
+            border: 1px solid rgba(251, 178, 60, 0.2);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 13px;
+            color: #FBB23C;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .warn-note span {
+            flex-shrink: 0;
+            font-size: 16px;
+        }
+
+        .info-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 14px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-row .lk {
+            color: var(--text-secondary);
+        }
+
+        .info-row .lv {
+            font-weight: 600;
+        }
+
+        .pill {
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .pill.pending {
+            background: rgba(245, 158, 11, 0.12);
+            color: #FBB23C;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .pill.approved {
+            background: rgba(16, 185, 129, 0.12);
+            color: #34D399;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .pill.rejected {
+            background: rgba(239, 68, 68, 0.12);
+            color: #F87171;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+        }
+
+        .pill.waitlisted {
+            background: rgba(139, 92, 246, 0.12);
+            color: #A78BFA;
+            border: 1px solid rgba(139, 92, 246, 0.25);
+        }
+
+        .pill.paid {
+            background: rgba(16, 185, 129, 0.12);
+            color: #34D399;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .pill.failed {
+            background: rgba(239, 68, 68, 0.12);
+            color: #F87171;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+        }
+
+        .btn-copy {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-copy:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+        }
+
+        .btn-login {
+            display: inline-block;
+            margin-top: 4px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            border-radius: 10px;
+            padding: 11px 24px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: opacity .2s;
+        }
+
+        .btn-login:hover {
+            opacity: .88;
+        }
+
+        /* ── Status lookup ── */
+        .lookup-form {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .lookup-form .field {
+            flex: 1;
+        }
+
+        .btn-lookup {
+            padding: 11px 22px;
+            border-radius: 10px;
+            background: rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            color: #38BDF8;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .2s;
+            white-space: nowrap;
+        }
+
+        .btn-lookup:hover {
+            background: rgba(14, 165, 233, 0.25);
+        }
+
+        .lookup-result {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .lookup-result h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .lookup-error {
+            margin-top: 16px;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: #F87171;
+            font-size: 14px;
+        }
+
+        /* ── Steps indicator ── */
+        .steps {
+            display: flex;
+            gap: 0;
+            margin-bottom: 28px;
+        }
+
+        .step {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 16px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.06);
+            z-index: 0;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+            color: var(--text-muted);
+        }
+
+        .step.active .step-num {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+
+        .step.done .step-num {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--primary);
+            color: #34D399;
+        }
+
+        .step-lbl {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        .step.active .step-lbl {
+            color: #34D399;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid .full {
+                grid-column: 1;
+            }
+
+            .bed-options {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .cred-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .lookup-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Topbar -->
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2v20M2 12h20" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+                </svg>
+            </div>
+            <div>
+                <div class="brand-name">MediFlow AI</div>
+                <div class="brand-sub">Hospital Bed Application</div>
+            </div>
+        </div>
+        <div class="topbar-links">
+            <a href="/apply" class="active">Apply for Bed</a>
+            <a href="/application-status">Check Status</a>
+            <a href="/login">Login</a>
+        </div>
+    </header>
+
+    <div class="page">
+
+        <!-- ──────────────────────────────────────────────────── SUCCESS VIEW -->
+        {% if success %}
+        <div class="section-head">
+            <h1>🎉 Application Submitted!</h1>
+            <p>Your hospital bed application has been received. Please save your credentials below.</p>
+        </div>
+
+        <div class="steps">
+            <div class="step done">
+                <div class="step-num">✓</div>
+                <div class="step-lbl">Applied</div>
+            </div>
+            <div class="step active">
+                <div class="step-num">2</div>
+                <div class="step-lbl">Under Review</div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-lbl">Approved</div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-lbl">Payment</div>
+            </div>
+            <div class="step">
+                <div class="step-num">5</div>
+                <div class="step-lbl">Admitted</div>
+            </div>
+        </div>
+
+        <div class="success-card">
+            <div class="success-badge">✅ Application Received</div>
+            <h2>Welcome, {{ success.name }}!</h2>
+            <p>Your application has been submitted successfully. Keep your Application ID and login credentials safe —
+                you will need them to track your status and log into the patient portal once approved.</p>
+
+            <div class="cred-grid">
+                <div class="cred-box app-id">
+                    <div class="cred-lbl">📋 Application ID</div>
+                    <div class="cred-val">{{ success.app_id }}</div>
+                </div>
+                <div class="cred-box user-id">
+                    <div class="cred-lbl">👤 Patient Login ID</div>
+                    <div class="cred-val">{{ success.user_id }}</div>
+                </div>
+                <div class="cred-box pwd">
+                    <div class="cred-lbl">🔑 Auto-generated Password</div>
+                    <div class="cred-val" id="pwdVal">{{ success.password }}</div>
+                </div>
+                <div class="cred-box amt">
+                    <div class="cred-lbl">💳 Payable Amount</div>
+                    <div class="cred-val">₹{{ "{:,.0f}".format(success.amount) }}</div>
+                </div>
+            </div>
+
+            <div class="warn-note">
+                <span>⚠️</span>
+                <div>This is the <strong>only time</strong> your password will be shown. Please copy and save it now.
+                    Use your <strong>Patient Login ID</strong> and this password to log in to the patient portal after
+                    your application is approved.</div>
+            </div>
+
+            <div class="info-rows">
+                <div class="info-row"><span class="lk">Bed Type</span><span class="lv">{{ success.bed_type }}</span>
+                </div>
+                <div class="info-row"><span class="lk">Department</span><span class="lv">{{ success.dept }}</span></div>
+                <div class="info-row"><span class="lk">Priority</span>
+                    <span class="lv"><span class="pill pending">{{ success.priority | upper }}</span></span>
+                </div>
+                <div class="info-row"><span class="lk">Application Status</span>
+                    <span class="lv"><span class="pill pending">PENDING REVIEW</span></span>
+                </div>
+                <div class="info-row"><span class="lk">Payment Status</span>
+                    <span class="lv"><span class="pill pending">PENDING</span></span>
+                </div>
+                <div class="info-row"><span class="lk">Applied At</span><span class="lv">{{ success.applied }}</span>
+                </div>
+            </div>
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+                <button class="btn-copy" onclick="copyAll()">📋 Copy All Credentials</button>
+                <a href="/application-status?id={{ success.app_id }}" class="btn-copy">🔍 Track My Application</a>
+                <a href="/login" class="btn-login">🏥 Go to Patient Login →</a>
+            </div>
+        </div>
+
+        <script>
+            function copyAll() {
+                const txt = `Application ID: {{ success.app_id }}\nLogin ID: {{ success.user_id }}\nPassword: {{ success.password }}\nAmount: ₹{{ "{:,.0f}".format(success.amount) }}`;
+                navigator.clipboard.writeText(txt).then(() => {
+                    const btn = document.querySelector('.btn-copy');
+                    btn.textContent = '✅ Copied!';
+                    setTimeout(() => btn.textContent = '📋 Copy All Credentials', 2000);
+                });
+            }
+        </script>
+
+        <!-- ──────────────────────────────────────────────── STATUS LOOKUP VIEW -->
+        {% elif lookup is defined and lookup_id %}
+        <div class="section-head">
+            <h1>🔍 Application Status</h1>
+            <p>View the current status of your hospital bed application.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-title"><span>🔎</span> Look Up Application</div>
+            <form class="lookup-form" action="/application-status" method="get">
+                <div class="field">
+                    <label>Application ID</label>
+                    <input type="text" name="id" placeholder="e.g. APP-123456" value="{{ lookup_id }}" />
+                </div>
+                <button type="submit" class="btn-lookup">Search</button>
+            </form>
+
+            {% if lookup_error %}
+            <div class="lookup-error">❌ {{ lookup_error }}</div>
+            {% endif %}
+
+            {% if lookup %}
+            <div class="lookup-result">
+                <h3>📄 Application Details — {{ lookup.id }}</h3>
+                <div class="info-rows">
+                    <div class="info-row"><span class="lk">Applicant Name</span><span class="lv">{{
+                            lookup.applicant_name }}</span></div>
+                    <div class="info-row"><span class="lk">Age / Gender</span><span class="lv">{{ lookup.age }} / {{
+                            lookup.gender | capitalize }}</span></div>
+                    <div class="info-row"><span class="lk">Department</span><span class="lv">{{ lookup.department
+                            }}</span></div>
+                    <div class="info-row"><span class="lk">Bed Type</span><span class="lv">{{ lookup.bed_type |
+                            capitalize }}</span></div>
+                    <div class="info-row"><span class="lk">Priority</span>
+                        <span class="lv"><span class="pill {{ lookup.priority }}">{{ lookup.priority | upper
+                                }}</span></span>
+                    </div>
+                    <div class="info-row"><span class="lk">Application Status</span>
+                        <span class="lv"><span class="pill {{ lookup.status }}">{{ lookup.status | upper
+                                }}</span></span>
+                    </div>
+                    <div class="info-row"><span class="lk">Payment Status</span>
+                        <span class="lv"><span class="pill {{ lookup.payment_status }}">{{ lookup.payment_status | upper
+                                }}</span></span>
+                    </div>
+                    <div class="info-row"><span class="lk">Amount Due</span><span class="lv">₹{{
+                            "{:,.0f}".format(lookup.payment_amount) }}</span></div>
+                    <div class="info-row"><span class="lk">Patient Login ID</span><span class="lv"
+                            style="color:#34D399;font-family:monospace">{{ lookup.user_id }}</span></div>
+                    <div class="info-row"><span class="lk">Applied At</span><span class="lv">{{ lookup.applied_at
+                            }}</span></div>
+                    {% if lookup.notes %}
+                    <div class="info-row"><span class="lk">Admin Notes</span><span class="lv">{{ lookup.notes }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <a href="/login" class="btn-login" style="margin-top:4px">🏥 Patient Portal Login →</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- ────────────────────────────────────────────────── DEFAULT FORM VIEW -->
+        {% else %}
+        <div class="section-head">
+            <h1>🏥 Apply for a Hospital Bed</h1>
+            <p>Fill in the form below. A unique Patient ID and password will be generated for your portal access upon
+                submission.</p>
+        </div>
+
+        <div class="steps">
+            <div class="step active">
+                <div class="step-num">1</div>
+                <div class="step-lbl">Apply</div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-lbl">Under Review</div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-lbl">Approved</div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-lbl">Payment</div>
+            </div>
+            <div class="step">
+                <div class="step-num">5</div>
+                <div class="step-lbl">Admitted</div>
+            </div>
+        </div>
+
+        {% if error %}
+        <div class="alert-error">⚠️ {{ error }}</div>
+        {% endif %}
+
+        <form method="post" action="/apply">
+            <!-- Personal Information -->
+            <div class="card">
+                <div class="card-title"><span>👤</span> Personal Information</div>
+                <div class="form-grid">
+                    <div class="field full">
+                        <label>Full Name *</label>
+                        <input type="text" name="name" placeholder="e.g. Rahul Sharma" required />
+                    </div>
+                    <div class="field">
+                        <label>Age *</label>
+                        <input type="number" name="age" min="1" max="120" placeholder="e.g. 35" required />
+                    </div>
+                    <div class="field">
+                        <label>Gender *</label>
+                        <select name="gender" required>
+                            <option value="" disabled selected>Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Contact Number *</label>
+                        <input type="tel" name="contact" placeholder="+91 99999 99999" required />
+                    </div>
+                    <div class="field">
+                        <label>Department *</label>
+                        <select name="department" required>
+                            <option value="" disabled selected>Select department</option>
+                            <option>Cardiology</option>
+                            <option>Neurology</option>
+                            <option>Orthopedics</option>
+                            <option>General Medicine</option>
+                            <option>Pediatrics</option>
+                            <option>Oncology</option>
+                            <option>Gynecology</option>
+                            <option>Emergency</option>
+                            <option>Surgery</option>
+                            <option>Dermatology</option>
+                        </select>
+                    </div>
+                    <div class="field full">
+                        <label>Address *</label>
+                        <textarea name="address" placeholder="Full residential address" required></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bed Type -->
+            <div class="card">
+                <div class="card-title"><span>🛏️</span> Choose Bed Type</div>
+                <div class="bed-options">
+                    <div class="bed-opt">
+                        <input type="radio" name="bed_type" id="b_general" value="general" checked />
+                        <label for="b_general">
+                            <span class="ico">🛏️</span>
+                            General<br>Ward
+                            <span class="price">₹1,500/day</span>
+                        </label>
+                    </div>
+                    <div class="bed-opt">
+                        <input type="radio" name="bed_type" id="b_semi" value="semi-private" />
+                        <label for="b_semi">
+                            <span class="ico">🏨</span>
+                            Semi-<br>Private
+                            <span class="price">₹3,500/day</span>
+                        </label>
+                    </div>
+                    <div class="bed-opt">
+                        <input type="radio" name="bed_type" id="b_private" value="private" />
+                        <label for="b_private">
+                            <span class="ico">🌟</span>
+                            Private<br>Room
+                            <span class="price">₹7,000/day</span>
+                        </label>
+                    </div>
+                    <div class="bed-opt">
+                        <input type="radio" name="bed_type" id="b_icu" value="icu" />
+                        <label for="b_icu">
+                            <span class="ico">🚨</span>
+                            ICU<br>Bed
+                            <span class="price">₹15,000/day</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medical Details -->
+            <div class="card">
+                <div class="card-title"><span>🩺</span> Medical Details</div>
+                <div class="form-grid">
+                    <div class="field full">
+                        <label>Reason for Admission / Chief Complaint *</label>
+                        <textarea name="reason"
+                            placeholder="Describe your symptoms or reason for needing a hospital bed..."
+                            required></textarea>
+                    </div>
+                    <div class="field full">
+                        <label>Self-assessed Priority</label>
+                        <div class="priority-options">
+                            <div class="prio-opt low">
+                                <input type="radio" name="priority" id="p_low" value="low" />
+                                <label for="p_low">Low</label>
+                            </div>
+                            <div class="prio-opt medium">
+                                <input type="radio" name="priority" id="p_med" value="medium" checked />
+                                <label for="p_med">Medium</label>
+                            </div>
+                            <div class="prio-opt high">
+                                <input type="radio" name="priority" id="p_high" value="high" />
+                                <label for="p_high">High</label>
+                            </div>
+                            <div class="prio-opt critical">
+                                <input type="radio" name="priority" id="p_crit" value="critical" />
+                                <label for="p_crit">Critical</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">🚀 Submit Application &amp; Generate My Credentials</button>
+        </form>
+
+        <!-- Status Lookup shortcut -->
+        <div class="card" style="margin-top:32px">
+            <div class="card-title"><span>🔍</span> Already Applied? Check Your Status</div>
+            <form class="lookup-form" action="/application-status" method="get">
+                <div class="field">
+                    <label>Application ID</label>
+                    <input type="text" name="id" placeholder="e.g. APP-123456" />
+                </div>
+                <button type="submit" class="btn-lookup">Search</button>
+            </form>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <script>
+        // Live clock (optional topbar use)
+        function tick() {
+            document.title = 'MediFlow AI — Apply for Hospital Bed';
+        }
+        tick();
+    </script>
+</body>
+
+</html>

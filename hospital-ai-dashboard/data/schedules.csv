@@ -1,0 +1,39 @@
+doctor_id,patient_id,patient_name,slot_time,duration_mins,status,notes
+1,P1003,Ravi Mehta,08:00,40,done,Abdominal pain - treated and discharged
+1,P1004,Sunita Gupta,08:45,25,done,Breathing difficulty - stabilized
+1,P1001,Arjun Sharma,09:30,35,in-progress,Chest pain - ECG in progress
+1,P1005,Vikram Reddy,10:30,20,scheduled,Head injury assessment
+1,P1002,Priya Patel,11:00,20,scheduled,High fever evaluation
+1,P1006,Meera Nair,11:30,15,scheduled,Sprained ankle X-ray
+1,P1007,Rohan Singh,12:00,20,scheduled,Allergic reaction management
+1,,Walk-in Emergency,13:00,30,scheduled,Slot reserved for emergency walk-in
+2,P1010,Deepa Bose,08:30,25,done,Exertional dyspnea - echocardiogram ordered
+2,P1008,Anjali Iyer,09:00,45,in-progress,Chest pain - cath lab consultation
+2,P1009,Kiran Das,10:30,30,scheduled,Palpitations - Holter monitor fitting
+2,P1011,Suresh Rao,11:30,35,scheduled,Hypertensive crisis - medication adjustment
+2,P1012,Nisha Joshi,13:00,20,scheduled,Routine cardiac review - stress test
+2,,Walk-in,14:00,20,scheduled,Slot reserved for walk-in
+3,P1013,Arun Sinha,08:00,30,done,Post knee-replacement review - healing well
+3,P1014,Pooja Verma,08:45,20,done,Lower back pain - physiotherapy referral
+3,P1018,Lakshmi Devi,09:30,30,in-progress,Spinal disc MRI review
+3,P1015,Rahul Kumar,10:30,25,scheduled,Fracture arm - cast check
+3,P1016,Anita Sharma,11:00,20,scheduled,Hip pain - X-ray review
+3,P1017,Sanjay Patel,12:00,15,scheduled,Sports injury rehab plan
+3,,Walk-in,13:00,20,scheduled,Slot reserved for emergency ortho
+4,P1019,Rajesh Gupta,08:30,20,done,Diabetes HbA1c review - controlled
+4,P1021,Mohan Rao,09:00,25,done,Hypertension management - BP normal
+4,P1022,Saritha Nair,10:00,20,scheduled,Thyroid TSH report review
+4,P1020,Kavitha Menon,11:00,15,scheduled,Routine annual checkup
+4,,Walk-in,12:00,20,scheduled,General consultation slot
+5,P1026,Om Reddy,08:00,35,done,Febrile seizure - observation complete
+5,P1025,Sia Sharma,08:45,20,done,Dehydration - IV fluids given & discharged
+5,P1023,Arya Patel,09:30,30,in-progress,High fever - blood culture pending
+5,P1024,Dev Kumar,10:30,25,scheduled,Respiratory distress - nebulization
+5,P1027,Tara Iyer,11:00,20,scheduled,Mild asthma attack
+5,P1029,Myra Patel,11:30,30,scheduled,Suspected appendicitis - ultrasound
+5,P1028,Veer Singh,13:00,10,scheduled,Routine vaccination
+5,P1030,Zara Khan,13:30,15,scheduled,Ear infection review
+6,P1032,Divya Menon,08:00,15,done,Deep laceration - sutured and discharged
+6,P1033,Harsh Gupta,08:30,45,in-progress,Post resuscitation monitoring
+6,P1031,Anand Verma,10:00,30,scheduled,Head trauma CT-scan review
+6,,Walk-in,11:00,30,scheduled,Emergency walk-in slot

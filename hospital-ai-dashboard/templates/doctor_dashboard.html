@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>MediFlow AI — Dr. {{ doctor.name }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <style>
+        /* Schedule timeline */
+        .schedule-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .slot-item {
+            display: grid;
+            grid-template-columns: 70px 90px 1fr auto;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            transition: border-color 0.2s;
+        }
+
+        .slot-item:hover {
+            border-color: var(--border-hover);
+        }
+
+        .slot-item.done {
+            opacity: 0.55;
+        }
+
+        .slot-item.in-progress {
+            border-color: rgba(14, 165, 233, 0.4);
+            background: rgba(14, 165, 233, 0.05);
+        }
+
+        .slot-time {
+            font-family: 'Outfit', monospace;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-accent);
+        }
+
+        .slot-status {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 99px;
+            text-align: center;
+        }
+
+        .slot-status.done {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34D399;
+        }
+
+        .slot-status.in-progress {
+            background: rgba(14, 165, 233, 0.15);
+            color: #38BDF8;
+        }
+
+        .slot-status.scheduled {
+            background: rgba(139, 92, 246, 0.15);
+            color: #A78BFA;
+        }
+
+        .slot-patient-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .slot-notes {
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .slot-duration {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .doctor-me-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .doctor-me-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .doctor-me-info h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .doctor-me-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">
+                <svg viewBox="0 0 36 36" fill="none">
+                    <rect width="36" height="36" rx="10" fill="url(#lg2)" />
+                    <path d="M18 8v20M8 18h20" stroke="#fff" stroke-width="3.5" stroke-linecap="round" />
+                    <circle cx="18" cy="18" r="6" stroke="#fff" stroke-width="2" fill="none" opacity="0.5" />
+                    <defs>
+                        <linearGradient id="lg2" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="{{ doctor.color }}" />
+                            <stop offset="1" stop-color="#0369A1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="logo-text"><span class="logo-name">MediFlow</span><span class="logo-sub">Doctor Portal</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-panel="overview" id="navOverview">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8" />
+                    <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8" />
+                    <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8" />
+                    <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8" />
+                </svg>
+                <span>My Overview</span>
+            </a>
+            <a href="#" class="nav-item" data-panel="schedule" id="navSchedule">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="4" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.8" />
+                    <path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                </svg>
+                <span>My Schedule</span>
+            </a>
+            <a href="#" class="nav-item" data-panel="queue" id="navQueue">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="9" cy="7" r="3.5" stroke="currentColor" stroke-width="1.8" />
+                    <circle cx="16" cy="7" r="3.5" stroke="currentColor" stroke-width="1.8" />
+                    <path d="M2 20c0-4 3.134-7 7-7h6c3.866 0 7 3 7 7" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" />
+                </svg>
+                <span>My Patients</span>
+            </a>
+            <a href="#" class="nav-item" data-panel="ai" id="navAI">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="1.8"
+                        stroke-linejoin="round" />
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.8"
+                        stroke-linejoin="round" />
+                </svg>
+                <span>AI Decisions</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="system-status">
+                <div class="status-dot pulse-green"></div><span>AI Engine: Online</span>
+            </div>
+            <div class="system-status mt-4">
+                <div class="status-dot pulse-blue"></div><span>{{ doctor.dept }} Dept</span>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle"><svg viewBox="0 0 24 24" fill="none">
+                        <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" />
+                    </svg></button>
+                <div>
+                    <h1 class="page-title" id="pageTitle">My Overview</h1>
+                    <p class="page-subtitle" id="pageSubtitle">{{ doctor.dept }} Department</p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="live-clock" id="liveClock"></div>
+                <div class="alert-badge"><svg viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M12 2C10.343 2 9 3.343 9 5v1.07A7.001 7.001 0 005 13v3l-2 2v1h18v-1l-2-2v-3a7.001 7.001 0 00-4-6.93V5c0-1.657-1.343-3-3-3z"
+                            stroke="currentColor" stroke-width="1.8" />
+                        <path d="M10 20a2 2 0 004 0" stroke="currentColor" stroke-width="1.8" />
+                    </svg><span class="badge-count" id="alertCount">0</span></div>
+                <div class="topbar-avatar" style="background:linear-gradient(135deg,{{ doctor.color }},#0369A1)">{{
+                    initials }}</div>
+                <a href="/logout"
+                    style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#F87171;font-size:12px;padding:7px 14px;border-radius:8px;text-decoration:none;font-weight:600">Logout</a>
+            </div>
+        </header>
+
+        <!-- MY OVERVIEW -->
+        <section class="panel active" id="panelOverview">
+            <div class="doctor-me-card">
+                <div class="doctor-me-avatar" style="background:{{ doctor.color }}22;color:{{ doctor.color }}">{{
+                    initials }}</div>
+                <div class="doctor-me-info">
+                    <h2>{{ doctor.name }}</h2>
+                    <p>{{ doctor.dept }} Department · MediFlow AI Hospital</p>
+                </div>
+            </div>
+            <div class="kpi-grid">
+                <div class="kpi-card" style="--accent:#0EA5E9">
+                    <div class="kpi-icon" style="background:rgba(14,165,233,0.12)"><svg viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="10" r="4" stroke="#0EA5E9" stroke-width="2" />
+                            <path d="M4 21c0-4.418 3.582-8 8-8s8 3.582 8 8" stroke="#0EA5E9" stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg></div>
+                    <div class="kpi-body"><span class="kpi-label">My Patients</span><span class="kpi-value"
+                            id="kpiPatients">—</span><span class="kpi-delta positive">Assigned to me</span></div>
+                </div>
+                <div class="kpi-card" style="--accent:#10B981">
+                    <div class="kpi-icon" style="background:rgba(16,185,129,0.12)"><svg viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="9" stroke="#10B981" stroke-width="2" />
+                            <path d="M12 7v5l3 3" stroke="#10B981" stroke-width="2" stroke-linecap="round" />
+                        </svg></div>
+                    <div class="kpi-body"><span class="kpi-label">Avg Wait Time</span><span class="kpi-value"
+                            id="kpiWait">—</span><span class="kpi-delta negative">↓ My queue</span></div>
+                </div>
+                <div class="kpi-card" style="--accent:#8B5CF6">
+                    <div class="kpi-icon" style="background:rgba(139,92,246,0.12)"><svg viewBox="0 0 24 24" fill="none">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg></div>
+                    <div class="kpi-body"><span class="kpi-label">My Utilization</span><span class="kpi-value"
+                            id="kpiUtil">—</span><span class="kpi-delta positive">Active</span></div>
+                </div>
+                <div class="kpi-card" style="--accent:#EF4444">
+                    <div class="kpi-icon" style="background:rgba(239,68,68,0.12)"><svg viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+                                stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg></div>
+                    <div class="kpi-body"><span class="kpi-label">Critical Patients</span><span class="kpi-value"
+                            id="kpiAlerts">—</span><span class="kpi-delta warning">⚠ Needs attention</span></div>
+                </div>
+                <div class="kpi-card" style="--accent:#06B6D4">
+                    <div class="kpi-icon" style="background:rgba(6,182,212,0.12)"><svg viewBox="0 0 24 24" fill="none">
+                            <path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"
+                                stroke="#06B6D4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg></div>
+                    <div class="kpi-body"><span class="kpi-label">Completed Today</span><span class="kpi-value"
+                            id="kpiDone">—</span><span class="kpi-delta positive">↑ Done</span></div>
+                </div>
+            </div>
+            <div class="bottom-row">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>🔔 My Alerts</h3>
+                    </div>
+                    <div class="alerts-list" id="alertsList"></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>🧠 AI Predictions</h3><span class="badge-info">My Queue</span>
+                    </div>
+                    <div class="predictions-list" id="predictionsList"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MY SCHEDULE -->
+        <section class="panel" id="panelSchedule">
+            <div class="card">
+                <div class="card-header">
+                    <h3>📅 Today's Schedule</h3><span class="live-pill">● LIVE</span>
+                </div>
+                <div class="schedule-timeline" id="scheduleTimeline">
+                    <p style="color:var(--text-muted);padding:20px">Loading schedule…</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- MY PATIENTS -->
+        <section class="panel" id="panelQueue">
+            <div class="queue-controls">
+                <div class="search-box"><svg viewBox="0 0 24 24" fill="none">
+                        <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" />
+                        <path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg><input type="text" id="searchPatient" placeholder="Search my patients…" /></div>
+                <div class="filter-group"><select id="filterPriority" class="filter-select">
+                        <option value="">All Priorities</option>
+                        <option value="critical">Critical</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select></div>
+            </div>
+            <div class="card">
+                <div class="table-wrapper">
+                    <table class="patient-table">
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>ID</th>
+                                <th>Priority</th>
+                                <th>Wait Time</th>
+                                <th>Predicted Duration</th>
+                                <th>AI Score</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patientTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align:center;padding:30px;color:var(--text-muted)">Loading
+                                    your patients…</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI DECISIONS -->
+        <section class="panel" id="panelAI">
+            <div class="xai-header">
+                <div class="xai-engine-status">
+                    <div class="ai-brain-icon">
+                        <div class="brain-pulse"></div><svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"
+                                stroke="currentColor" stroke-width="1.5" />
+                            <path d="M8 9h8M8 12h5M8 15h6" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3>AI Decision Engine</h3>
+                        <p>AI-powered actions for your patients</p>
+                    </div>
+                    <div class="rl-stats">
+                        <div class="rl-stat"><span id="rlEpisodes">0</span><small>Episodes</small></div>
+                        <div class="rl-stat"><span id="rlReward">0.00</span><small>Avg Reward</small></div>
+                        <div class="rl-stat"><span id="rlActions">0</span><small>Actions</small></div>
+                    </div>
+                </div>
+            </div>
+            <div class="xai-decisions-list" id="xaiDecisionsList"></div>
+            <div class="card mt-20">
+                <div class="card-header">
+                    <h3>🔍 Decision Factor Weights</h3><span class="badge-info">Current Model</span>
+                </div>
+                <div class="feature-importance" id="featureImportance"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        // Inject doctor data for JS
+        const DOCTOR = {{ doctor | tojson }};
+    </script>
+    <script src="/static/doctor_app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+id,name,age,dept,priority,status,wait_mins,doctor_id,complaint,predicted_duration,ai_score,email,password
+P1001,Arjun Sharma,34,ER,critical,in-progress,42,1,Chest pain and shortness of breath,35,0.95,arjun@patient.com,patient123
+P1002,Priya Patel,28,ER,high,waiting,18,1,High fever with chills,20,0.72,priya.p@patient.com,patient123
+P1003,Ravi Mehta,55,ER,critical,done,0,1,Severe abdominal pain,40,0.91,ravi@patient.com,patient123
+P1004,Sunita Gupta,67,ER,high,done,0,1,Difficulty breathing,25,0.83,sunita@patient.com,patient123
+P1005,Vikram Reddy,41,ER,medium,waiting,31,1,Head injury - minor,20,0.61,vikram@patient.com,patient123
+P1006,Meera Nair,22,ER,low,waiting,12,1,Sprained ankle,15,0.38,meera@patient.com,patient123
+P1007,Rohan Singh,38,ER,high,scheduled,0,1,Allergic reaction,20,0.78,rohan@patient.com,patient123
+P1008,Anjali Iyer,52,CARD,critical,in-progress,28,2,Chest pain with ECG changes,45,0.93,anjali@patient.com,patient123
+P1009,Kiran Das,60,CARD,high,waiting,35,2,Palpitations and dizziness,30,0.81,kiran@patient.com,patient123
+P1010,Deepa Bose,47,CARD,medium,done,0,2,Shortness of breath on exertion,25,0.64,deepa@patient.com,patient123
+P1011,Suresh Rao,71,CARD,critical,waiting,52,2,Hypertensive crisis,35,0.96,suresh.r@patient.com,patient123
+P1012,Nisha Joshi,44,CARD,medium,scheduled,0,2,Routine cardiac review,20,0.52,nisha@patient.com,patient123
+P1013,Arun Sinha,58,ORT,high,done,0,3,Knee replacement follow-up,30,0.74,arun@patient.com,patient123
+P1014,Pooja Verma,35,ORT,medium,done,0,3,Lower back pain,20,0.55,pooja@patient.com,patient123
+P1015,Rahul Kumar,42,ORT,high,waiting,24,3,Fracture - right arm,25,0.79,rahul@patient.com,patient123
+P1016,Anita Sharma,63,ORT,medium,waiting,16,3,Hip pain and stiffness,20,0.58,anita@patient.com,patient123
+P1017,Sanjay Patel,29,ORT,low,scheduled,0,3,Sports injury - shoulder,15,0.42,sanjay@patient.com,patient123
+P1018,Lakshmi Devi,50,ORT,medium,in-progress,38,3,Spinal disc problem,30,0.68,lakshmi@patient.com,patient123
+P1019,Rajesh Gupta,45,GEN,medium,done,0,4,Diabetes follow-up,20,0.51,rajesh@patient.com,patient123
+P1020,Kavitha Menon,33,GEN,low,waiting,10,4,Routine checkup,15,0.35,kavitha@patient.com,patient123
+P1021,Mohan Rao,68,GEN,high,done,0,4,Hypertension management,25,0.76,mohan@patient.com,patient123
+P1022,Saritha Nair,40,GEN,medium,waiting,22,4,Thyroid disorder review,20,0.59,saritha@patient.com,patient123
+P1023,Arya Patel,8,PED,critical,in-progress,15,5,High fever - 104F,30,0.92,arya.parent@patient.com,patient123
+P1024,Dev Kumar,5,PED,high,waiting,20,5,Respiratory distress,25,0.84,dev.parent@patient.com,patient123
+P1025,Sia Sharma,12,PED,medium,done,0,5,Vomiting and dehydration,20,0.63,sia.parent@patient.com,patient123
+P1026,Om Reddy,3,PED,critical,done,0,5,Febrile seizure,35,0.94,om.parent@patient.com,patient123
+P1027,Tara Iyer,10,PED,medium,waiting,18,5,Asthma attack - mild,20,0.67,tara.parent@patient.com,patient123
+P1028,Veer Singh,7,PED,low,scheduled,0,5,Routine vaccination,10,0.31,veer.parent@patient.com,patient123
+P1029,Myra Patel,14,PED,high,waiting,27,5,Appendicitis suspected,30,0.86,myra.parent@patient.com,patient123
+P1030,Zara Khan,9,PED,medium,scheduled,0,5,Ear infection,15,0.53,zara.parent@patient.com,patient123
+P1031,Anand Verma,48,ER,high,waiting,33,6,Head trauma - motor accident,30,0.87,anand@patient.com,patient123
+P1032,Divya Menon,26,ER,medium,done,0,6,Laceration - deep cut,15,0.61,divya@patient.com,patient123
+P1033,Harsh Gupta,53,ER,critical,in-progress,44,6,Cardiac arrest - resuscitated,45,0.98,harsh@patient.com,patient123

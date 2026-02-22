@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediFlow AI — Hospital Patient Flow Optimization</title>
+  <meta name="description"
+    content="AI-powered real-time patient flow optimization system with ML predictions, reinforcement learning scheduling, and explainable AI for hospitals." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ====== SIDEBAR ====== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="36" height="36" rx="10" fill="url(#logoGrad)" />
+          <path d="M18 8v20M8 18h20" stroke="#fff" stroke-width="3.5" stroke-linecap="round" />
+          <circle cx="18" cy="18" r="6" stroke="#fff" stroke-width="2" fill="none" opacity="0.5" />
+          <defs>
+            <linearGradient id="logoGrad" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#0EA5E9" />
+              <stop offset="1" stop-color="#0369A1" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">MediFlow</span>
+        <span class="logo-sub">AI Dashboard</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-panel="overview" id="navOverview">
+        <svg viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8" />
+          <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8" />
+          <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8" />
+          <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8" />
+        </svg>
+        <span>Live Overview</span>
+      </a>
+      <a href="#" class="nav-item" data-panel="queue" id="navQueue">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="9" cy="7" r="3.5" stroke="currentColor" stroke-width="1.8" />
+          <circle cx="16" cy="7" r="3.5" stroke="currentColor" stroke-width="1.8" />
+          <path d="M2 20c0-4 3.134-7 7-7h6c3.866 0 7 3 7 7" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" />
+        </svg>
+        <span>Patient Queue</span>
+      </a>
+      <a href="#" class="nav-item" data-panel="doctors" id="navDoctors">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 3C9.239 3 7 5.239 7 8s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5z" stroke="currentColor"
+            stroke-width="1.8" />
+          <path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          <path d="M16 14l2 2 3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        <span>Doctor Workload</span>
+      </a>
+      <a href="#" class="nav-item" data-panel="ai" id="navAI">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+          <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+        </svg>
+        <span>AI Decisions</span>
+      </a>
+      <a href="#" class="nav-item" data-panel="simulation" id="navSim">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
+          <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path d="M12 3v3M12 18v3M3 12h3M18 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+        <span>What-If Simulator</span>
+      </a>
+      <a href="#" class="nav-item" data-panel="flow" id="navFlow">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="5" cy="12" r="2.5" stroke="currentColor" stroke-width="1.8" />
+          <circle cx="19" cy="5" r="2.5" stroke="currentColor" stroke-width="1.8" />
+          <circle cx="19" cy="19" r="2.5" stroke="currentColor" stroke-width="1.8" />
+          <path d="M7.5 12h4M13.5 7.6l2.6-2M13.5 16.4l2.6 2" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" />
+        </svg>
+        <span>Patient Flow Graph</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="system-status">
+        <div class="status-dot pulse-green"></div>
+        <span>AI Engine: Online</span>
+      </div>
+      <div class="system-status mt-4">
+        <div class="status-dot pulse-blue"></div>
+        <span>Real-time sync active</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====== MAIN CONTENT ====== -->
+  <main class="main-content">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+        <div>
+          <h1 class="page-title" id="pageTitle">Live Overview</h1>
+          <p class="page-subtitle" id="pageSubtitle">Real-time patient flow optimization — Updated just now</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="live-clock" id="liveClock"></div>
+        <div class="alert-badge" id="alertBadge">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 2C10.343 2 9 3.343 9 5v1.07A7.001 7.001 0 005 13v3l-2 2v1h18v-1l-2-2v-3a7.001 7.001 0 00-4-6.93V5c0-1.657-1.343-3-3-3z"
+              stroke="currentColor" stroke-width="1.8" />
+            <path d="M10 20a2 2 0 004 0" stroke="currentColor" stroke-width="1.8" />
+          </svg>
+          <span class="badge-count" id="alertCount">3</span>
+        </div>
+        <div class="topbar-avatar">DR</div>
+      </div>
+    </header>
+
+    <!-- ======================================================= -->
+    <!-- PANEL: OVERVIEW -->
+    <!-- ======================================================= -->
+    <section class="panel active" id="panelOverview">
+
+      <!-- KPIS -->
+      <div class="kpi-grid">
+        <div class="kpi-card" style="--accent:#0EA5E9">
+          <div class="kpi-icon" style="background:rgba(14,165,233,0.12)">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="10" r="4" stroke="#0EA5E9" stroke-width="2" />
+              <path d="M4 21c0-4.418 3.582-8 8-8s8 3.582 8 8" stroke="#0EA5E9" stroke-width="2"
+                stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Patients Today</span>
+            <span class="kpi-value" id="kpiPatients">0</span>
+            <span class="kpi-delta positive">↑ 12% vs yesterday</span>
+          </div>
+        </div>
+        <div class="kpi-card" style="--accent:#10B981">
+          <div class="kpi-icon" style="background:rgba(16,185,129,0.12)">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9" stroke="#10B981" stroke-width="2" />
+              <path d="M12 7v5l3 3" stroke="#10B981" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Avg Wait Time</span>
+            <span class="kpi-value" id="kpiWait">0<small>min</small></span>
+            <span class="kpi-delta negative">↓ 18% improvement</span>
+          </div>
+        </div>
+        <div class="kpi-card" style="--accent:#F59E0B">
+          <div class="kpi-icon" style="background:rgba(245,158,11,0.12)">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#F59E0B" stroke-width="2"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">AI Optimizations</span>
+            <span class="kpi-value" id="kpiOpt">0</span>
+            <span class="kpi-delta positive">↑ Active today</span>
+          </div>
+        </div>
+        <div class="kpi-card" style="--accent:#8B5CF6">
+          <div class="kpi-icon" style="background:rgba(139,92,246,0.12)">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Doctor Utilization</span>
+            <span class="kpi-value" id="kpiUtil">0<small>%</small></span>
+            <span class="kpi-delta positive">↑ Optimal range</span>
+          </div>
+        </div>
+        <div class="kpi-card" style="--accent:#EF4444">
+          <div class="kpi-icon" style="background:rgba(239,68,68,0.12)">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+                stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Active Alerts</span>
+            <span class="kpi-value" id="kpiAlerts">0</span>
+            <span class="kpi-delta warning">⚠ Needs attention</span>
+          </div>
+        </div>
+        <div class="kpi-card" style="--accent:#06B6D4">
+          <div class="kpi-icon" style="background:rgba(6,182,212,0.12)">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="#06B6D4"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">Completed Today</span>
+            <span class="kpi-value" id="kpiDone">0</span>
+            <span class="kpi-delta positive">↑ On schedule</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHARTS ROW -->
+      <div class="charts-row">
+        <div class="card chart-card wide">
+          <div class="card-header">
+            <h3>Real-Time Queue Volume</h3>
+            <span class="live-pill">● LIVE</span>
+          </div>
+          <div class="chart-body"><canvas id="queueChart"></canvas></div>
+        </div>
+        <div class="card chart-card">
+          <div class="card-header">
+            <h3>Department Load</h3>
+            <span class="badge-info">Now</span>
+          </div>
+          <div class="chart-body"><canvas id="deptChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- ALERTS AND PREDICTIONS -->
+      <div class="bottom-row">
+        <div class="card alerts-card">
+          <div class="card-header">
+            <h3>🔔 AI Alert Feed</h3>
+            <button class="clear-btn" id="clearAlerts">Clear all</button>
+          </div>
+          <div class="alerts-list" id="alertsList"></div>
+        </div>
+        <div class="card predictions-card">
+          <div class="card-header">
+            <h3>🧠 ML Predictions</h3>
+            <span class="badge-info">Next 2h</span>
+          </div>
+          <div class="predictions-list" id="predictionsList"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- PANEL: PATIENT QUEUE -->
+    <!-- ======================================================= -->
+    <section class="panel" id="panelQueue">
+      <div class="queue-controls">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" />
+            <path d="M21 21l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+          <input type="text" id="searchPatient" placeholder="Search patient by name or ID…" />
+        </div>
+        <div class="filter-group">
+          <select id="filterDept" class="filter-select">
+            <option value="">All Departments</option>
+            <option value="ER">Emergency</option>
+            <option value="CARD">Cardiology</option>
+            <option value="ORT">Orthopedics</option>
+            <option value="GEN">General</option>
+            <option value="PED">Pediatrics</option>
+          </select>
+          <select id="filterPriority" class="filter-select">
+            <option value="">All Priorities</option>
+            <option value="critical">Critical</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+          <button class="btn-primary" id="addPatientBtn">+ Add Walk-in</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="table-wrapper">
+          <table class="patient-table" id="patientTable">
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>ID</th>
+                <th>Department</th>
+                <th>Priority</th>
+                <th>Wait Time</th>
+                <th>Predicted Duration</th>
+                <th>AI Score</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="patientTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADD PATIENT MODAL -->
+      <div class="modal-overlay" id="addPatientModal">
+        <div class="modal">
+          <div class="modal-header">
+            <h3>Register Walk-in Patient</h3>
+            <button class="modal-close" id="closeModal">✕</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Patient Name</label>
+                <input type="text" id="newPatientName" placeholder="Full name" />
+              </div>
+              <div class="form-group">
+                <label>Age</label>
+                <input type="number" id="newPatientAge" placeholder="Age" min="1" max="120" />
+              </div>
+              <div class="form-group">
+                <label>Department</label>
+                <select id="newPatientDept">
+                  <option value="ER">Emergency</option>
+                  <option value="CARD">Cardiology</option>
+                  <option value="ORT">Orthopedics</option>
+                  <option value="GEN">General</option>
+                  <option value="PED">Pediatrics</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Priority</label>
+                <select id="newPatientPriority">
+                  <option value="critical">Critical</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+              <div class="form-group full-width">
+                <label>Chief Complaint</label>
+                <input type="text" id="newPatientComplaint" placeholder="Describe symptoms…" />
+              </div>
+            </div>
+            <div class="ai-estimate" id="aiEstimate">
+              <div class="ai-estimate-icon">🤖</div>
+              <div>
+                <strong>AI Triage Estimate</strong>
+                <p id="aiEstimateText">Fill in patient details to get AI-powered triage estimate.</p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn-secondary" id="cancelModal">Cancel</button>
+            <button class="btn-primary" id="confirmAddPatient">Register & Assign Slot</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- PANEL: DOCTOR WORKLOAD -->
+    <!-- ======================================================= -->
+    <section class="panel" id="panelDoctors">
+      <div class="doctors-grid" id="doctorsGrid"></div>
+      <div class="card mt-20">
+        <div class="card-header">
+          <h3>📊 Workload Distribution (Real-Time)</h3>
+          <span class="live-pill">● LIVE</span>
+        </div>
+        <div class="chart-body" style="height:200px"><canvas id="workloadChart"></canvas></div>
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- PANEL: AI DECISIONS (XAI) -->
+    <!-- ======================================================= -->
+    <section class="panel" id="panelAI">
+      <div class="xai-header">
+        <div class="xai-engine-status">
+          <div class="ai-brain-icon">
+            <div class="brain-pulse"></div>
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" stroke="currentColor"
+                stroke-width="1.5" />
+              <path d="M8 9h8M8 12h5M8 15h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div>
+            <h3>Reinforcement Learning Engine</h3>
+            <p>Continuously optimizing scheduling decisions using real-time queue state</p>
+          </div>
+          <div class="rl-stats">
+            <div class="rl-stat"><span id="rlEpisodes">0</span><small>Episodes</small></div>
+            <div class="rl-stat"><span id="rlReward">0.00</span><small>Avg Reward</small></div>
+            <div class="rl-stat"><span id="rlActions">0</span><small>Actions Today</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="xai-decisions-list" id="xaiDecisionsList"></div>
+
+      <div class="card mt-20">
+        <div class="card-header">
+          <h3>🔍 Decision Factor Weights (Feature Importance)</h3>
+          <span class="badge-info">Current Model State</span>
+        </div>
+        <div class="feature-importance" id="featureImportance"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- PANEL: WHAT-IF SIMULATOR -->
+    <!-- ======================================================= -->
+    <section class="panel" id="panelSimulation">
+      <div class="simulator-layout">
+        <div class="card simulator-controls">
+          <div class="card-header">
+            <h3>⚙️ Scenario Configuration</h3>
+          </div>
+          <div class="sim-form">
+            <div class="sim-group">
+              <label>Doctor Availability <span id="simDoctorVal">8</span></label>
+              <input type="range" id="simDoctors" min="2" max="20" value="8" class="slider" />
+            </div>
+            <div class="sim-group">
+              <label>Expected Arrivals/hr <span id="simArrivalVal">15</span></label>
+              <input type="range" id="simArrivals" min="5" max="60" value="15" class="slider" />
+            </div>
+            <div class="sim-group">
+              <label>Emergency Walk-in Rate <span id="simEmergencyVal">10</span>%</label>
+              <input type="range" id="simEmergency" min="0" max="50" value="10" class="slider" />
+            </div>
+            <div class="sim-group">
+              <label>No-Show Rate <span id="simNoShowVal">15</span>%</label>
+              <input type="range" id="simNoShow" min="0" max="40" value="15" class="slider" />
+            </div>
+            <div class="sim-group">
+              <label>Avg Consultation Duration <span id="simDurationVal">20</span> min</label>
+              <input type="range" id="simDuration" min="5" max="60" value="20" class="slider" />
+            </div>
+            <div class="sim-group">
+              <label>Staff Experience Level</label>
+              <select id="simExperience" class="filter-select">
+                <option value="junior">Junior Staff</option>
+                <option value="mixed" selected>Mixed</option>
+                <option value="senior">Senior Staff</option>
+              </select>
+            </div>
+            <button class="btn-primary full-btn" id="runSimulation">▶ Run AI Simulation</button>
+            <button class="btn-secondary full-btn" id="resetSimulation">↺ Reset to Baseline</button>
+          </div>
+        </div>
+        <div class="simulator-results">
+          <div class="sim-results-grid" id="simResultsGrid">
+            <div class="sim-result-card">
+              <div class="sim-result-icon" style="color:#10B981">⏱</div>
+              <div class="sim-result-label">Predicted Wait Time</div>
+              <div class="sim-result-value" id="simWaitResult">—</div>
+              <div class="sim-result-change" id="simWaitChange"></div>
+            </div>
+            <div class="sim-result-card">
+              <div class="sim-result-icon" style="color:#0EA5E9">👨‍⚕️</div>
+              <div class="sim-result-label">Doctor Utilization</div>
+              <div class="sim-result-value" id="simUtilResult">—</div>
+              <div class="sim-result-change" id="simUtilChange"></div>
+            </div>
+            <div class="sim-result-card">
+              <div class="sim-result-icon" style="color:#F59E0B">📋</div>
+              <div class="sim-result-label">Queue Overflow Risk</div>
+              <div class="sim-result-value" id="simOverflowResult">—</div>
+              <div class="sim-result-change" id="simOverflowChange"></div>
+            </div>
+            <div class="sim-result-card">
+              <div class="sim-result-icon" style="color:#8B5CF6">🎯</div>
+              <div class="sim-result-label">System Efficiency</div>
+              <div class="sim-result-value" id="simEfficiencyResult">—</div>
+              <div class="sim-result-change" id="simEfficiencyChange"></div>
+            </div>
+          </div>
+          <div class="card mt-20">
+            <div class="card-header">
+              <h3>Simulation Timeline</h3>
+              <span class="badge-info" id="simBadge">Ready</span>
+            </div>
+            <div class="chart-body"><canvas id="simChart"></canvas></div>
+          </div>
+          <div class="card mt-20" id="simRecommendations" style="display:none">
+            <div class="card-header">
+              <h3>🤖 AI Recommendations</h3>
+            </div>
+            <div id="simRecsContent"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- PANEL: PATIENT FLOW GRAPH -->
+    <!-- ======================================================= -->
+    <section class="panel" id="panelFlow">
+      <div class="flow-layout">
+        <div class="card flow-graph-card">
+          <div class="card-header">
+            <h3>Patient Flow Graph — Department Network</h3>
+            <span class="live-pill">● LIVE</span>
+          </div>
+          <div class="flow-graph-container" id="flowGraph">
+            <svg id="flowSvg" width="100%" height="auto" viewBox="0 0 960 460"
+              preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+        </div>
+        <div class="flow-sidebar">
+          <div class="card">
+            <div class="card-header">
+              <h3>Flow Statistics</h3>
+            </div>
+            <div class="flow-stats" id="flowStats"></div>
+          </div>
+          <div class="card mt-20">
+            <div class="card-header">
+              <h3>Bottleneck Detection</h3>
+            </div>
+            <div class="bottleneck-list" id="bottleneckList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

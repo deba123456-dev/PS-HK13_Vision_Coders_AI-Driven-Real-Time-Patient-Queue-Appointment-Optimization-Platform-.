@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>MediFlow — Patient Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #10B981;
+            --bg-base: #060D1A;
+            --bg-card: #0F1E35;
+            --bg-surface: #0B1628;
+            --border: rgba(16, 185, 129, 0.15);
+            --border-hover: rgba(16, 185, 129, 0.3);
+            --text-primary: #E2F0FF;
+            --text-secondary: #7BA3C8;
+            --text-muted: #4A6080;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-base);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+        }
+
+        /* Topbar */
+        .topbar {
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 28px;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(12px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .brand-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #34D399, #60A5FA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .live-clock {
+            font-size: 13px;
+            color: #34D399;
+            background: rgba(16, 185, 129, 0.08);
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .patient-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10B981, #059669);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .btn-logout {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #F87171;
+            font-size: 12px;
+            padding: 7px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Content */
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        /* Patient card */
+        .patient-hero {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .patient-hero-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10B981, #059669);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            flex-shrink: 0;
+            border: 3px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .patient-hero-info h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .patient-hero-info p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .patient-id-badge {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            color: #34D399;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 99px;
+            margin-top: 8px;
+            display: inline-block;
+        }
+
+        /* Status card */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .stat-detail {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Priority badge */
+        .priority-pill {
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .priority-pill.critical {
+            background: rgba(239, 68, 68, 0.15);
+            color: #F87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .priority-pill.high {
+            background: rgba(245, 158, 11, 0.15);
+            color: #FBB23C;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .priority-pill.medium {
+            background: rgba(14, 165, 233, 0.15);
+            color: #38BDF8;
+            border: 1px solid rgba(14, 165, 233, 0.3);
+        }
+
+        .priority-pill.low {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34D399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        /* Status pill */
+        .status-pill {
+            padding: 6px 16px;
+            border-radius: 99px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .status-pill.waiting {
+            background: rgba(245, 158, 11, 0.15);
+            color: #FBB23C;
+        }
+
+        .status-pill.in-progress {
+            background: rgba(14, 165, 233, 0.15);
+            color: #38BDF8;
+        }
+
+        .status-pill.done {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34D399;
+        }
+
+        .status-pill.scheduled {
+            background: rgba(139, 92, 246, 0.15);
+            color: #A78BFA;
+        }
+
+        /* Card */
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+        }
+
+        .info-card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-key {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .info-val {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Doctor card */
+        .doctor-card-pat {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.08), rgba(139, 92, 246, 0.05));
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 14px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .doc-avatar-pat {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .doc-info-pat h3 {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .doc-info-pat p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Progress bar */
+        .progress-wrap {
+            margin-top: 16px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .progress-track {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, #10B981, #059669);
+            transition: width 1.2s ease;
+        }
+
+        /* AI estimate */
+        .ai-box {
+            background: rgba(14, 165, 233, 0.06);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .ai-box-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .ai-box-text strong {
+            display: block;
+            color: #38BDF8;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .ai-box-text p {
+            font-size: 12.5px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon"><svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2v20M2 12h20" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+                </svg></div>
+            <div>
+                <div class="brand-name">MediFlow AI</div>
+                <div class="brand-sub">Patient Portal</div>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <div class="live-clock" id="liveClock"></div>
+            <div class="patient-avatar">{{ patient.name[:2] | upper }}</div>
+            <a href="/logout" class="btn-logout">Logout</a>
+        </div>
+    </header>
+
+    <div class="content">
+
+        <!-- Hero -->
+        <div class="patient-hero">
+            <div class="patient-hero-avatar">{{ patient.name[:2] | upper }}</div>
+            <div class="patient-hero-info">
+                <h1>{{ patient.name }}</h1>
+                <p>Age {{ patient.age }} · {{ patient.dept }} Department</p>
+                <div class="patient-id-badge">Patient ID: {{ patient.id }}</div>
+            </div>
+            <div style="margin-left:auto;text-align:right">
+                <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Current Status</div>
+                <span class="status-pill {{ patient.status }}">
+                    {% if patient.status == 'waiting' %}⏳ Waiting
+                    {% elif patient.status == 'in-progress' %}🩺 In Consultation
+                    {% elif patient.status == 'done' %}✅ Completed
+                    {% else %}📅 Scheduled
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="status-grid">
+            <div class="stat-card">
+                <div class="stat-label">⏱ Current Wait</div>
+                {% if patient.status == 'waiting' %}
+                <div class="stat-value" style="color:#F59E0B">{{ patient.wait_mins }} <span
+                        style="font-size:16px;font-weight:500">min</span></div>
+                <div class="stat-detail">In queue for your appointment</div>
+                {% elif patient.status == 'in-progress' %}
+                <div class="stat-value" style="color:#0EA5E9">Now</div>
+                <div class="stat-detail">You are currently with your doctor</div>
+                {% elif patient.status == 'done' %}
+                <div class="stat-value" style="color:#10B981">Done</div>
+                <div class="stat-detail">Your visit is complete</div>
+                {% else %}
+                <div class="stat-value" style="color:#8B5CF6">—</div>
+                <div class="stat-detail">Not yet in queue</div>
+                {% endif %}
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">🩺 Est. Consultation</div>
+                <div class="stat-value" style="color:#0EA5E9">{{ patient.predicted_duration }} <span
+                        style="font-size:16px;font-weight:500">min</span></div>
+                <div class="stat-detail">AI-predicted duration</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">🎯 Priority Level</div>
+                <div class="stat-value" style="font-size:18px;margin-top:6px">
+                    <span class="priority-pill {{ patient.priority }}">{{ patient.priority | upper }}</span>
+                </div>
+                <div class="stat-detail">Triage assessment</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">🤖 AI Urgency Score</div>
+                <div class="stat-value"
+                    style="color:{% if patient.ai_score > 0.75 %}#EF4444{% elif patient.ai_score > 0.5 %}#F59E0B{% else %}#10B981{% endif %}">
+                    {{ (patient.ai_score * 100) | round | int }}%
+                </div>
+                <div class="progress-wrap">
+                    <div class="progress-track">
+                        <div class="progress-fill" data-width="{{ (patient.ai_score * 100) | round | int }}"
+                            data-color="{% if patient.ai_score > 0.75 %}#EF4444{% elif patient.ai_score > 0.5 %}#F59E0B{% else %}#10B981{% endif %}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Your Doctor -->
+        {% if patient.doctor_name %}
+        <div class="doctor-card-pat">
+            <div class="doc-avatar-pat"
+                style="background:{{ patient.doctor_color }}22;color:{{ patient.doctor_color }}">
+                {{ patient.doctor_name.split()[1][:2] | upper }}
+            </div>
+            <div class="doc-info-pat">
+                <h3>Your Doctor: {{ patient.doctor_name }}</h3>
+                <p>{{ patient.doctor_dept }} Department · MediFlow AI Hospital</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Schedule slot -->
+        {% if schedule %}
+        <div class="info-card">
+            <div class="info-card-title">📅 Your Appointment Slot</div>
+            <div class="info-row"><span class="info-key">Scheduled Time</span><span class="info-val">{{
+                    schedule.slot_time }}</span></div>
+            <div class="info-row"><span class="info-key">Duration</span><span class="info-val">{{ schedule.duration_mins
+                    }} minutes</span></div>
+            <div class="info-row"><span class="info-key">Slot Status</span><span class="info-val"><span
+                        class="status-pill {{ schedule.status }}">{{ schedule.status | capitalize }}</span></span></div>
+            {% if schedule.notes %}
+            <div class="info-row"><span class="info-key">Notes</span><span class="info-val"
+                    style="max-width:60%;text-align:right">{{ schedule.notes }}</span></div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Complaint & Details -->
+        <div class="info-card">
+            <div class="info-card-title">🏥 Visit Details</div>
+            <div class="info-row"><span class="info-key">Chief Complaint</span><span class="info-val">{{
+                    patient.complaint }}</span></div>
+            <div class="info-row"><span class="info-key">Department</span><span class="info-val">{{ patient.dept
+                    }}</span></div>
+            <div class="info-row"><span class="info-key">Age</span><span class="info-val">{{ patient.age }} years</span>
+            </div>
+            <div class="ai-box">
+                <div class="ai-box-icon">🤖</div>
+                <div class="ai-box-text">
+                    <strong>AI Triage Insight</strong>
+                    <p>Based on your symptoms and current queue state, the AI recommends {{ patient.priority }} priority
+                        handling. Estimated total visit time: <strong style="color:#38BDF8">{{ patient.wait_mins +
+                            patient.predicted_duration }} minutes</strong>.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function updateClock() {
+            const el = document.getElementById('liveClock');
+            if (el) el.textContent = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+        setInterval(updateClock, 1000); updateClock();
+
+        // Apply dynamic styles from data attributes to avoid CSS linter false positives
+        document.querySelectorAll('.progress-fill[data-width]').forEach(function (el) {
+            el.style.width = el.dataset.width + '%';
+            el.style.background = el.dataset.color;
+        });
+    </script>
+</body>
+
+</html>

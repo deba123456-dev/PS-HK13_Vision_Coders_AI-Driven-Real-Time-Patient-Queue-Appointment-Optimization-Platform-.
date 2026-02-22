@@ -1,0 +1,7 @@
+id,name,dept,email,password,color
+1,Dr. Amit Malhotra,Emergency,malhotra@mediflow.com,doctor123,#EF4444
+2,Dr. Priya Sen,Cardiology,sen@mediflow.com,doctor123,#0EA5E9
+3,Dr. Rajan Krishnan,Orthopedics,krishnan@mediflow.com,doctor123,#F59E0B
+4,Dr. Nadia Okonkwo,General,okonkwo@mediflow.com,doctor123,#10B981
+5,Dr. Suresh Patel,Pediatrics,patel@mediflow.com,doctor123,#8B5CF6
+6,Dr. Kavya Iyer,Emergency,iyer@mediflow.com,doctor123,#06B6D4
